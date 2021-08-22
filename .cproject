@@ -28,6 +28,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/imgui}&quot;"/>
 									<listOptionValue builtIn="false" value="/home/thierry/Dev/libs/SFML/include"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.dialect.std.1179316152" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.c++17" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.589019990" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1995124678" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
@@ -91,6 +92,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/imgui}&quot;"/>
 									<listOptionValue builtIn="false" value="/home/thierry/Dev/libs/SFML/include"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.dialect.std.2002249195" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.c++17" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1725034437" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.release.1492793295" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.release">

@@ -67,6 +67,7 @@ class SceneSim final : public Scene
     void setGridVertices();
     sf::Vector2i getGridCoord();
     void goBack();
+    void loadDataFile();
 
 };
 

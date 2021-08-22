@@ -2,6 +2,7 @@
 #define GUI_HPP_
 
 #include "imgui.h" // necessary for ImGui::*, imgui-SFML.h doesn't include imgui.h
+#include "imfilebrowser.h"
 #include <SFML/System/Clock.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <string>
@@ -87,6 +88,23 @@ class Gui final
       return sf::Color(mBgColor[0] * 255, mBgColor[1] * 255, mBgColor[2] * 255);
     }
 
+    const bool isFileDialogOpened()
+    {
+      return fileDialog.isOpened();
+    }
+
+    bool loadFile()
+    {
+      return !mDataFile.empty();
+    }
+
+    std::string getFileName()
+    {
+      std::string s(mDataFile);
+      mDataFile = "";
+      return s;
+    }
+
 private:
     sf::RenderWindow* window;
     sf::Clock clock;
@@ -102,8 +120,10 @@ private:
     float mCellColor[3];
     float mGridColor[3];
     float mBgColor[3];
+    std::string mDataFile;
     ImVec2 min;
     ImVec2 max;
+    ImGui::FileBrowser fileDialog;
 
     void setGui();
 };

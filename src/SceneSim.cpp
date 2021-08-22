@@ -1,5 +1,6 @@
 #include "SceneSim.hpp"
 #include <numeric>
+#include "reader/PlainTextReader.hpp"
 
 SceneSim::SceneSim()
   : Scene()
@@ -88,7 +89,7 @@ void SceneSim::update(const float dt)
   gui.setGeneration(mGeneration);
   gui.setPopulation(grid->size());
 
-  if(gui.doReset())
+  if(gui.doReset() || gui.loadFile())
   {
     gridA.clear();
     gridB.clear();
@@ -109,6 +110,11 @@ void SceneSim::update(const float dt)
     gui.stopRunning();
   }
 
+  if(gui.loadFile())
+  {
+    loadDataFile();
+  }
+
   gui.update();
 
   if(viewMove != sf::Vector2f(0, 0))
@@ -116,7 +122,6 @@ void SceneSim::update(const float dt)
     view.move(viewMove);
     viewMove = sf::Vector2f(0, 0);
   }
-
 }
 
 void SceneSim::goBack()
@@ -301,6 +306,18 @@ void SceneSim::addCell(const unsigned short int v)
     grid->erase(coord.x, coord.y);
   } else {
     grid->set(coord.x, coord.y, 1);
+  }
+}
+
+void SceneSim::loadDataFile()
+{
+  PlainTextReader reader;
+  reader.readFile(gui.getFileName());
+  std::vector<std::pair<int, int>> datas = reader.getDatas();
+  sf::Vector2i center = static_cast<sf::Vector2i>(view.getCenter()) / static_cast<int>(cellSize);
+  for(auto& d : datas)
+  {
+    gridA.set(center.x + d.first, center.y + d.second, 1);
   }
 }
 

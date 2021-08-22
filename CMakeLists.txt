@@ -14,9 +14,9 @@ endif()
 
 set(SFML_LIBS sfml-graphics sfml-system sfml-window)
 
-file(GLOB SOURCES src/*.cpp src/imgui/*.cpp src/include/*.cpp src/sparsegrid/*.cpp)
+file(GLOB SOURCES src/*.cpp src/imgui/*.cpp)
 add_executable(${PROJECT_NAME} ${WIN32_GUI} ${SOURCES})
-target_include_directories(${PROJECT_NAME} PRIVATE "src/imgui" "src/include" "src/sparsegrid")
+target_include_directories(${PROJECT_NAME} PRIVATE "src/imgui" "src/include" "src/sparsegrid" "src/reader")
 set(SFML_LIBS sfml-system sfml-window sfml-graphics)
 target_link_libraries(${PROJECT_NAME} ${SFML_LIBS})
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
