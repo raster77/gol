@@ -27,7 +27,10 @@ class AbstractReader
 	std::string line;
 	while(getline(dataFile, line))
 	{
-	  processLine(line, lineNumber);
+	  if(line.length() > 0)
+	  {
+	    processLine(line, lineNumber);
+	  }
 	  lineNumber++;
 	}
 	dataFile.close();

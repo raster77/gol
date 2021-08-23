@@ -94,7 +94,7 @@ void Gui::init(sf::RenderWindow* renderWindow)
   window = renderWindow;
   ImGui::SFML::Init(*window);
   fileDialog.setTitle("title");
-  fileDialog.setTypeFilters({ ".cells" });
+  fileDialog.setTypeFilters({ ".cells", ".rle" });
 }
 
 void Gui::handleEvent(const sf::Event& event)

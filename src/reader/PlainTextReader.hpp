@@ -23,7 +23,7 @@ class PlainTextReader final : public AbstractReader
       std::string line;
       while(getline(f, line))
       {
-	if(line.length() > 0 && line[0] != '!')
+	if(line[0] != '!')
 	{
 	  start = std::min(start, idx);
 	}

@@ -1,6 +1,9 @@
 #include "SceneSim.hpp"
+#include <algorithm>
+#include <memory>
 #include <numeric>
 #include "reader/PlainTextReader.hpp"
+#include "reader/RleReader.hpp"
 
 SceneSim::SceneSim()
   : Scene()
@@ -173,28 +176,24 @@ void SceneSim::handleEvent(sf::Event& event)
     if(event.key.code == sf::Keyboard::Up)
     {
       viewMove.y = 50.f;
-      //view.setCenter(view.getCenter() + sf::Vector2f(0.f, 50.f));
       updateGrid = true;
     }
 
     if(event.key.code == sf::Keyboard::Down)
     {
       viewMove.y = -50.f;
-      //view.setCenter(view.getCenter() + sf::Vector2f(0.f, -50.f));
       updateGrid = true;
     }
 
     if(event.key.code == sf::Keyboard::Left)
     {
       viewMove.x = -50.f;
-      //view.setCenter(view.getCenter() + sf::Vector2f(-50.f, 0.f));
       updateGrid = true;
     }
 
     if(event.key.code == sf::Keyboard::Right)
     {
       viewMove.x = 50.f;
-      //view.setCenter(view.getCenter() + sf::Vector2f(50.f, 0.f));
       updateGrid = true;
     }
 
@@ -311,9 +310,19 @@ void SceneSim::addCell(const unsigned short int v)
 
 void SceneSim::loadDataFile()
 {
-  PlainTextReader reader;
-  reader.readFile(gui.getFileName());
-  std::vector<std::pair<int, int>> datas = reader.getDatas();
+  const std::string file = gui.getFileName();
+  std::string ext = file.substr(file.length() - 3, 3);
+  std::transform(ext.begin(), ext.end(), ext.begin(), [] (unsigned char c) { return std::tolower(c); });
+  std::unique_ptr<AbstractReader> reader;
+  if(ext == "rle")
+  {
+    reader = std::make_unique<RleReader>();
+  } else {
+    reader = std::make_unique<PlainTextReader>();
+  }
+
+  reader.get()->readFile(file);
+  std::vector<std::pair<int, int>> datas = reader.get()->getDatas();
   sf::Vector2i center = static_cast<sf::Vector2i>(view.getCenter()) / static_cast<int>(cellSize);
   for(auto& d : datas)
   {
@@ -327,6 +336,7 @@ void SceneSim::updateVertices(SparseGrid* grid)
   vertices.reserve(grid->size() * 4);
   const float CS = static_cast<float>(cellSize);
   auto it = grid->begin();
+  sf::Color c = gui.getCellColor();
   while(it != grid->end())
   {
     const float vx = static_cast<float>(it->second.row * CS);
@@ -336,7 +346,7 @@ void SceneSim::updateVertices(SparseGrid* grid)
       alpha = 255;
     else if(alpha < 50)
       alpha = 50;
-    sf::Color c = gui.getCellColor();
+
     //c.a = alpha;
     vertices.emplace_back(sf::Vector2f(vx, vy));
     vertices.back().color = c;
