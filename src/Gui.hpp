@@ -59,9 +59,14 @@ class Gui final
       return mShowGrid;
     }
 
-    const bool goBack() const
+    bool goBack()
     {
-      return mDoGoBack;
+      bool b = mDoGoBack;
+      if(mDoGoBack)
+      {
+	mDoGoBack = false;
+      }
+      return b;
     }
 
     const float getStepTime() const
