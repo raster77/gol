@@ -43,6 +43,7 @@ void SceneSim::load()
   rule.set({3}, {2, 3});
   setGridVertices();
   gui.init(window);
+  gui.loadFont("res/DroidSerif-Regular.ttf", 14);
 }
 
 void SceneSim::update(const float dt)
@@ -171,6 +172,11 @@ void SceneSim::handleEvent(sf::Event& event)
     if(event.key.code == sf::Keyboard::I)
     {
       std::cout << fps.getFPS() << std::endl;
+    }
+
+    if(event.key.code == sf::Keyboard::T)
+    {
+      boundingBox();
     }
 
     if(event.key.code == sf::Keyboard::Up)
@@ -306,6 +312,107 @@ void SceneSim::addCell(const unsigned short int v)
   } else {
     grid->set(coord.x, coord.y, 1);
   }
+}
+
+void SceneSim::boundingBox()
+{
+
+  SparseGrid* grid = mGeneration % 2 == 0 ? &gridA : &gridB;
+  Cell minCell(999999, 999999, 1);
+  Cell maxCell(-999999, -999999, 1);
+  std::vector<Cell> cells;
+  auto it = grid->begin();
+  while(it != grid->end())
+  {
+    cells.emplace_back(it->second);
+    if(it->second.row < minCell.row)
+    {
+      minCell.row = it->second.row;
+    }
+
+    if(it->second.col < minCell.col)
+    {
+      minCell.col = it->second.col;
+    }
+
+    if(it->second.row > maxCell.row)
+    {
+      maxCell.row = it->second.row;
+    }
+
+    if(it->second.col > maxCell.col)
+    {
+      maxCell.col = it->second.col;
+    }
+    ++it;
+  }
+
+  std::sort(cells.begin(), cells.end());
+
+  int width = (maxCell.row - minCell.row) + 1;
+  int height = (maxCell.col - minCell.col) + 1;
+
+  std::cout << "Min: " << minCell.row << " " << minCell.col << std::endl;
+  std::cout << "Max: " << maxCell.row << " " << maxCell.col << std::endl;
+  std::cout << "Width: " << width << " Height: " << height << std::endl;
+  std::string pattern;
+  for(int y = 0; y < height; ++y)
+  {
+    std::string tmp;
+    for(int x = 0; x < width; ++x)
+    {
+      Cell c = minCell;
+      c.row += x;
+      c.col += y;
+      int val = 0;
+      if(std::find(cells.begin(), cells.end(), c) != cells.end())
+      {
+	val = 1;
+      }
+      tmp.append(std::to_string(val));
+    }
+    while(true)
+    {
+      if(!tmp.empty() && tmp[tmp.size()-1] == '0')
+      {
+	tmp.pop_back();
+      } else {
+	break;
+      }
+    }
+    pattern.append(tmp);
+    pattern.append("$");
+  }
+
+  char lastChar = pattern[0];
+  std::size_t count = 1;
+  std::string encoded = "";
+
+  for(std::size_t i = 1; i < pattern.size(); ++i)
+  {
+    if(lastChar == pattern[i])
+    {
+      count++;
+    } else {
+      char val = lastChar == '0' ? 'b' : 'o';
+      if(lastChar == '$')
+	val = '$';
+      if(pattern[i] != '$' || (pattern[i] == '$' && val != 'b'))
+      {
+	if(count > 1) {
+	  encoded.append(std::to_string(count));
+	}
+	encoded += val;
+      }
+      count = 1;
+      lastChar = pattern[i];
+    }
+  }
+  encoded += '!';
+
+  std::cout << pattern << std::endl;
+  std::cout << encoded << std::endl;
+
 }
 
 void SceneSim::loadDataFile()

@@ -41,6 +41,26 @@ struct Cell
   {
     return row == rhs.row && col == rhs.col;
   }
+
+  bool operator<(const Cell& rhs) const
+  {
+    return row < rhs.row && col < rhs.col;
+  }
+
+  bool operator<=(const Cell& rhs) const
+  {
+    return row <= rhs.row && col <= rhs.col;
+  }
+
+  bool operator>(const Cell& rhs) const
+  {
+    return row > rhs.row && col > rhs.col;
+  }
+
+  bool operator>=(const Cell& rhs) const
+  {
+    return row >= rhs.row && col >= rhs.col;
+  }
 };
 
 struct Coord

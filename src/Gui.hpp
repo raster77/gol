@@ -17,6 +17,7 @@ class Gui final
     void update();
     void render();
     bool isFocused();
+    void loadFont(const std::string& font, const float size);
 
     void setCoord(sf::Vector2i coord)
     {
@@ -121,6 +122,7 @@ private:
     float mGridColor[3];
     float mBgColor[3];
     std::string mDataFile;
+    ImFont* mFont;
     ImVec2 min;
     ImVec2 max;
     ImGui::FileBrowser fileDialog;

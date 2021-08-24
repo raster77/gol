@@ -90,6 +90,11 @@ namespace ImGui
         // default value is 0 (the first type filter)
         void setCurrentTypeFilterIndex(int index);
 
+        void setFont(ImFont* font)
+        {
+          mFont = font;
+        }
+
     private:
 
         template <class Functor>
@@ -156,6 +161,7 @@ namespace ImGui
 
         // IMPROVE: truncate when selectedFilename_.length() > inputNameBuf_.size() - 1
         static constexpr size_t INPUT_NAME_BUF_SIZE = 512;
+        ImFont* mFont;
         std::unique_ptr<std::array<char, INPUT_NAME_BUF_SIZE>> inputNameBuf_;
 
         std::string openNewDirLabel_;
@@ -170,6 +176,7 @@ namespace ImGui
 inline ImGui::FileBrowser::FileBrowser(ImGuiFileBrowserFlags flags)
     : width_(700), height_(450), flags_(flags),
       openFlag_(false), closeFlag_(false), isOpened_(false), ok_(false),
+      mFont(nullptr),
       inputNameBuf_(std::make_unique<std::array<char, INPUT_NAME_BUF_SIZE>>())
 {
     if(flags_ & ImGuiFileBrowserFlags_CreateNewDir)
@@ -297,6 +304,7 @@ inline void ImGui::FileBrowser::display()
             ImVec2(static_cast<float>(width_), static_cast<float>(height_)),
             ImGuiCond_FirstUseEver);
     }
+
     if(flags_ & ImGuiFileBrowserFlags_NoModal)
     {
         if(!BeginPopup(openLabel_.c_str()))
@@ -310,6 +318,10 @@ inline void ImGui::FileBrowser::display()
     }
     isOpened_ = true;
     FileBrowser::ScopeGuard endPopup([] { EndPopup(); });
+    if(mFont != nullptr)
+    {
+      ImGui::PushFont(mFont);
+    }
 
     // display elements in pwd
 
@@ -567,6 +579,10 @@ inline void ImGui::FileBrowser::display()
             }
         }
         PopItemWidth();
+    }
+    if(mFont != nullptr)
+    {
+      ImGui::PopFont();
     }
 }
 

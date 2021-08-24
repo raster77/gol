@@ -68,6 +68,7 @@ class SceneSim final : public Scene
     sf::Vector2i getGridCoord();
     void goBack();
     void loadDataFile();
+    void boundingBox();
 
 };
 

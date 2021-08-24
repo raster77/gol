@@ -17,6 +17,7 @@ Gui::Gui()
   , mGridColor{0.58f, 0.58f, 0.58f}
   , mBgColor{0.18f, 0.18f, 0.18f}
   , mDataFile("")
+  , mFont(nullptr)
 {
 }
 
@@ -28,6 +29,11 @@ Gui::~Gui()
 void Gui::setGui()
 {
   ImGui::Begin(" ");
+  if(mFont != nullptr)
+  {
+    ImGui::PushFont(mFont);
+  }
+
   std::string lbl = "XY: ";
   lbl.append(std::to_string(mCoord.x)).append(" ").append(std::to_string(mCoord.y));
   lbl.append("\n").append("Generation: ").append(std::to_string(mGeneration));
@@ -72,6 +78,11 @@ void Gui::setGui()
   min.y = ImGui::GetWindowPos().y - 10;
   max.x = ImGui::GetWindowSize().x + ImGui::GetWindowPos().x + 10;
   max.y = ImGui::GetWindowSize().y + ImGui::GetWindowPos().y + 10;
+
+  if(mFont != nullptr)
+  {
+    ImGui::PopFont();
+  }
   ImGui::End();
 
   fileDialog.display();
@@ -95,6 +106,15 @@ void Gui::init(sf::RenderWindow* renderWindow)
   ImGui::SFML::Init(*window);
   fileDialog.setTitle("title");
   fileDialog.setTypeFilters({ ".cells", ".rle" });
+}
+
+void Gui::loadFont(const std::string& font, const float size)
+{
+  ImGuiIO& io = ImGui::GetIO();
+  mFont = io.Fonts->AddFontFromFileTTF(font.c_str(), size);
+  ImGui::SFML::UpdateFontTexture();
+
+  fileDialog.setFont(mFont);
 }
 
 void Gui::handleEvent(const sf::Event& event)
